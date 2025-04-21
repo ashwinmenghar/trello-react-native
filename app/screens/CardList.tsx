@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView, View } from "react-native";
 import { useGetMergedBoardDataQuery } from "../redux/services/boardWithCardsApi";
-import { Button, Card, Text } from "react-native-paper";
+import { Button, Text } from "react-native-paper";
 import BoardsAndCardsList from "./cards/BoardsAndCardsList";
 import Loading from "./Loading";
+import { CardListRouteProp } from "../types/card";
+import AddList from "./AddList";
 
-const CardList = ({ route, navigation }) => {
+const CardList = ({ route }: { route: CardListRouteProp }) => {
   const { boardId } = route.params;
   const { data: cards, isLoading, error } = useGetMergedBoardDataQuery(boardId);
+
+  const [isAddingList, setIsAddingList] = useState(false);
 
   return (
     <View style={{ flex: 1, backgroundColor: "pink" }}>
@@ -20,42 +24,48 @@ const CardList = ({ route, navigation }) => {
         </Text>
       )}
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        pagingEnabled={false}
-        snapToInterval={310}
-        snapToAlignment="start"
-        decelerationRate="fast"
-        contentContainerStyle={{ paddingHorizontal: 10 }}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            gap: 10,
-            marginTop: 10,
-          }}
+      {!isLoading && !error && cards && (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled={false}
+          snapToInterval={310}
+          snapToAlignment="start"
+          decelerationRate="fast"
+          contentContainerStyle={{ paddingHorizontal: 10 }}
         >
-          {cards &&
-            cards.map((card) => (
-              <BoardsAndCardsList key={card.id} cards={card} />
-            ))}
-
           <View
             style={{
+              flexDirection: "row",
+              gap: 10,
               marginTop: 10,
             }}
           >
-            <Button
-              icon="plus"
-              mode="elevated"
-              onPress={() => console.log("Pressed")}
+            {cards &&
+              cards.map((card) => (
+                <BoardsAndCardsList key={card.id} cards={card} />
+              ))}
+
+            <View
+              style={{
+                marginTop: 10,
+              }}
             >
-              Add another list
-            </Button>
+              {isAddingList ? (
+                <AddList setIsAddingList={setIsAddingList} />
+              ) : (
+                <Button
+                  icon="plus"
+                  mode="elevated"
+                  onPress={() => setIsAddingList(true)}
+                >
+                  Add another list
+                </Button>
+              )}
+            </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      )}
     </View>
   );
 };

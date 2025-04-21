@@ -1,8 +1,8 @@
+import { RouteProp } from "@react-navigation/native";
+
 export interface TrelloList {
   id: string;
   name: string;
-  closed: boolean;
-  pos: number;
 }
 
 export interface TrelloCard {
@@ -11,6 +11,7 @@ export interface TrelloCard {
   idList: string;
   desc: string;
   pos: number;
+  cardData: CardData[];
 }
 
 export interface MergedCard extends TrelloCard {
@@ -30,3 +31,8 @@ export interface CardData {
   idList: string;
   name: string;
 }
+
+export type CardListRouteProp = RouteProp<
+  { params: { boardId: string } },
+  "params"
+>;

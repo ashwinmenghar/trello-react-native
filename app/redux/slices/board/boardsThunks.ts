@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { createBoard, getBoards } from "../../../hepler";
+import { createBoard, getBoards } from "../../../helper";
 
 // Async thunk to fetch all boards
 export const fetchBoards = createAsyncThunk("boards/fetchBoards", async () => {

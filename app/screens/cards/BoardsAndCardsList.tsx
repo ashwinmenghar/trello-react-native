@@ -23,9 +23,7 @@ const BoardsAndCardsList = ({ cards }: { cards: CardProps }) => {
               ))}
             </ScrollView>
           )}
-
-        
-            <AddCard />
+          <AddCard />
         </View>
       </Card.Content>
     </Card>

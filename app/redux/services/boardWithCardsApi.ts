@@ -10,15 +10,11 @@ export const boardWithCardsApi = createApi({
 
   endpoints: (builder) => ({
     getMergedBoardData: builder.query<MergedCard[], string>({
-      async queryFn(boardId, _queryApi, _extraOptions, fetchWithBQ) {
+      async queryFn(boardId, _queryApi, _extraOptions, baseQuery) {
         try {
           const [listsRes, cardsRes] = await Promise.all([
-            fetchWithBQ(
-              `/boards/${boardId}/lists?key=${API_KEY}&token=${TOKEN}`
-            ),
-            fetchWithBQ(
-              `/boards/${boardId}/cards?key=${API_KEY}&token=${TOKEN}`
-            ),
+            baseQuery(`/boards/${boardId}/lists?key=${API_KEY}&token=${TOKEN}`),
+            baseQuery(`/boards/${boardId}/cards?key=${API_KEY}&token=${TOKEN}`),
           ]);
 
           if (listsRes.error || cardsRes.error) {
