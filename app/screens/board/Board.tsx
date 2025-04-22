@@ -1,9 +1,9 @@
 import React from "react";
 import { Card, Text } from "react-native-paper";
-import * as BoardType from "../types/board";
+import * as BoardType from "../../types/board";
 import { Link, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../types/paramList";
+import { RootStackParamList } from "../../types/paramList";
 
 const Board = ({ board }: { board: BoardType.Board }) => {
   const navigation =
