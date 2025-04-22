@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Card, Text, TextInput } from "react-native-paper";
 import { RootStackParamList } from "../../types/paramList";
 import { Modal, StyleSheet, View } from "react-native";
@@ -22,12 +22,22 @@ function AddBoard({
   const [modalVisible, setModalVisible] = useState(false);
   const [text, setText] = useState("");
 
+  const handleSaveBtn = () => {
+    if (text.length === 0) {
+      return;
+    }
+
+    setModalVisible(!modalVisible);
+    handleCreateBoard(text);
+    setText("");
+  };
+
   if (isLoading) {
     return <Loading />;
   }
 
   if (error) {
-    return <Error error={error} />;
+    return <Error error={error?.data ?? error?.error} />;
   }
 
   return (
@@ -61,11 +71,7 @@ function AddBoard({
               </Button>
               <Button
                 mode="elevated"
-                onPress={() => {
-                  text.length > 0 && setModalVisible(!modalVisible);
-                  handleCreateBoard(text);
-                  setText("");
-                }}
+                onPress={handleSaveBtn}
                 disabled={text.length === 0}
               >
                 Save

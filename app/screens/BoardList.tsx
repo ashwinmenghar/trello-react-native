@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { FlatList, ScrollView, StyleSheet, View, Text } from "react-native";
+import {
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  View,
+  Text,
+  RefreshControl,
+} from "react-native";
 import Loading from "./Loading";
 import Board from "./board/Board";
 import * as BoardType from "../types/board";
@@ -11,6 +18,8 @@ import AddBoard from "./board/AddBoard";
 import Error from "./Error";
 
 const BoardList = () => {
+  const [refreshing, setRefreshing] = useState(false);
+
   const {
     data,
     error,
@@ -23,12 +32,14 @@ const BoardList = () => {
     refetch: () => void;
   } = useGetBoardsQuery();
 
-  const [createBoard, { isLoading: isCreating, error: createError }] =
-    useCreateBoardsMutation<{
-      data: BoardType.Board;
-      error: any;
-      isLoading: boolean;
-    }>();
+  const [
+    createBoard,
+    { isLoading: isCreating, error: createError, reset: resetCreateBoard },
+  ] = useCreateBoardsMutation<{
+    data: BoardType.Board;
+    error: any;
+    isLoading: boolean;
+  }>();
 
   const handleCreateBoard = async (value: string) => {
     const result = await createBoard(value);
@@ -37,7 +48,17 @@ const BoardList = () => {
     }
   };
 
-  if (isLoading) {
+  const onRefresh = () => {
+    setRefreshing(true);
+    try {
+      resetCreateBoard();
+      refetch();
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  if (isLoading && !refreshing) {
     return (
       <View style={styles.container}>
         <Loading />
@@ -45,7 +66,7 @@ const BoardList = () => {
     );
   }
 
-  if (error) {
+  if (error && !refreshing) {
     return (
       <View style={styles.container}>
         <Error error={error} />
@@ -66,6 +87,14 @@ const BoardList = () => {
             data={data}
             keyExtractor={(board: BoardType.Board) => board.id.toString()}
             renderItem={({ item }) => <Board board={item} />}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                colors={["grey"]}
+                progressBackgroundColor={"black"}
+              />
+            }
           />
         </View>
       )}

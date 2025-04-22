@@ -4,11 +4,17 @@ import { Text } from "react-native-paper";
 
 const Error = ({ error }: { error: string }) => {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text variant="titleLarge" style={{ color: "red" }}>
-        {error}
-      </Text>
-    </View>
+    <Text
+      variant="titleLarge"
+      style={{
+        color: "red",
+        fontWeight: "bold",
+        fontSize: 18,
+        textAlign: "center",
+      }}
+    >
+      {error}
+    </Text>
   );
 };
 
