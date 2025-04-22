@@ -10,6 +10,7 @@ export const boardWithCardsApi = createApi({
 
   endpoints: (builder) => ({
     getMergedBoardData: builder.query<MergedCard[], string>({
+      // @ts-ignore
       async queryFn(boardId, _queryApi, _extraOptions, baseQuery) {
         try {
           const [listsRes, cardsRes] = await Promise.all([
@@ -35,6 +36,19 @@ export const boardWithCardsApi = createApi({
         }
       },
     }),
+
+    // createLists: builder.mutation({
+    //   query: ({ name, boardId }: { name: string; boardId: string }) => ({
+    //     url: `listsss/`,
+    //     method: "POST",
+    //     params: {
+    //       key: API_KEY,
+    //       token: TOKEN,
+    //       name: name,
+    //       idBoard: boardId,
+    //     },
+    //   }),
+    // }),
   }),
 });
 

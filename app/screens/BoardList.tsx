@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  View,
-  Text,
-  RefreshControl,
-} from "react-native";
+import { FlatList, StyleSheet, View, RefreshControl } from "react-native";
 import Loading from "./Loading";
 import Board from "./board/Board";
 import * as BoardType from "../types/board";
@@ -39,6 +32,7 @@ const BoardList = () => {
     data: BoardType.Board;
     error: any;
     isLoading: boolean;
+    reset: () => void;
   }>();
 
   const handleCreateBoard = async (value: string) => {

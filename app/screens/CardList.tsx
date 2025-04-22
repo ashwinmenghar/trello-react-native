@@ -4,14 +4,19 @@ import { useGetMergedBoardDataQuery } from "../redux/services/boardWithCardsApi"
 import { Button, Text } from "react-native-paper";
 import BoardsAndCardsList from "./cards/BoardsAndCardsList";
 import Loading from "./Loading";
-import { CardListRouteProp } from "../types/card";
+import { CardListRouteProp, CardProps } from "../types/card";
 import AddList from "./AddList";
 
 const CardList = ({ route }: { route: CardListRouteProp }) => {
   const { boardId } = route.params;
-  const { data: cards, isLoading, error } = useGetMergedBoardDataQuery(boardId);
 
-  const [isAddingList, setIsAddingList] = useState(false);
+  const {
+    data: cards,
+    isLoading,
+    error,
+    refetch,
+  } = useGetMergedBoardDataQuery(boardId);
+  const [isAddingList, setIsAddingList] = useState<boolean>(false);
 
   return (
     <View style={{ flex: 1, backgroundColor: "pink" }}>
@@ -52,7 +57,11 @@ const CardList = ({ route }: { route: CardListRouteProp }) => {
               }}
             >
               {isAddingList ? (
-                <AddList setIsAddingList={setIsAddingList} />
+                <AddList
+                  setIsAddingList={setIsAddingList}
+                  boardId={boardId}
+                  refetch={refetch}
+                />
               ) : (
                 <Button
                   icon="plus"
