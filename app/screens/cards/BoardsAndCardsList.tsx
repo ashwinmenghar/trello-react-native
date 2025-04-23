@@ -21,8 +21,6 @@ const BoardsAndCardsList = ({
 
   const handleDeleteBoardAndCardsList = async () => {
     const { data } = await removeList({ listId: cards.id });
-    console.log(data);
-
     if (data) {
       refetch();
     }

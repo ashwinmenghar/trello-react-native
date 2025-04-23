@@ -6,6 +6,7 @@ import { View } from "react-native";
 import Loading from "./Loading";
 import Error from "./Error";
 import { useCreateListsMutation } from "../redux/services/ListApi";
+import { getErrorMessage } from "../helper";
 
 const AddList = ({
   setIsAddingList,
@@ -30,11 +31,9 @@ const AddList = ({
     }
   };
 
-  console.log(error);
-
   return (
     <Card style={{ width: 350 }}>
-      {error && <Error error={error.error ?? "Something went wrong"} />}
+      {error && <Error error={getErrorMessage(error)} />}
 
       {isLoading && (
         <View style={{ height: 100 }}>
