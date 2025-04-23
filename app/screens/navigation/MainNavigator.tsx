@@ -20,6 +20,7 @@ const MainNavigator = () => {
         <Stack.Screen name="Board" component={BoardList} />
         <Stack.Screen
           name="CardList"
+          // @ts-ignore
           component={CardList}
           options={({
             route,

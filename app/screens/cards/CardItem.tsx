@@ -10,12 +10,12 @@ const CardItem = ({ cardData }: { cardData: CardData }) => {
     <View
       style={{
         backgroundColor: "#e7e2e1",
-        padding: 5,
+        padding: 10,
         borderRadius: 10,
         marginVertical: 5,
       }}
     >
-      <Text variant="bodyMedium" style={{ fontWeight: "500" }}>
+      <Text variant="bodyMedium" style={{ fontWeight: "500", marginLeft: 10 }}>
         {cardData.name}
       </Text>
     </View>

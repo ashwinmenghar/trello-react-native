@@ -1,8 +1,8 @@
 import React from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
-import { ActivityIndicator, Card, Text } from "react-native-paper";
+import { Card, Text } from "react-native-paper";
 import { FontAwesome6 } from "@expo/vector-icons";
-import { CardProps } from "../../types/card";
+import { CardData, BoardListProps } from "../../types/card";
 import CardItem from "./CardItem";
 import AddCard from "./AddCard";
 import { useRemoveListMutation } from "../../redux/services/ListApi";
@@ -11,16 +11,16 @@ import Error from "../Error";
 import { getErrorMessage } from "../../helper";
 
 const BoardsAndCardsList = ({
-  cards,
+  boardList,
   refetch,
 }: {
-  cards: CardProps;
+  boardList: BoardListProps;
   refetch: () => void;
 }) => {
   const [removeList, { isLoading, error, isError }] = useRemoveListMutation();
 
   const handleDeleteBoardAndCardsList = async () => {
-    const { data } = await removeList({ listId: cards.id });
+    const { data } = await removeList({ listId: boardList.id });
     if (data) {
       refetch();
     }
@@ -43,7 +43,7 @@ const BoardsAndCardsList = ({
       {!isLoading && !isError && (
         <Card.Content>
           <View style={styles.header}>
-            <Text variant="titleSmall">{cards.name}</Text>
+            <Text variant="titleSmall">{boardList.name}</Text>
             <FontAwesome6
               name="trash"
               size={16}
@@ -54,14 +54,14 @@ const BoardsAndCardsList = ({
           </View>
 
           <View>
-            {cards?.cardData?.length > 0 && (
+            {boardList?.cardData?.length > 0 && (
               <ScrollView nestedScrollEnabled>
-                {cards.cardData.map((card) => (
+                {boardList.cardData.map((card: CardData) => (
                   <CardItem cardData={card} key={card.id} />
                 ))}
               </ScrollView>
             )}
-            <AddCard />
+            <AddCard refetch={refetch} listId={boardList.id} />
           </View>
         </Card.Content>
       )}

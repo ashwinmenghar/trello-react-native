@@ -4,32 +4,28 @@ import { useGetMergedBoardDataQuery } from "../redux/services/boardWithCardsApi"
 import { Button, Text } from "react-native-paper";
 import BoardsAndCardsList from "./cards/BoardsAndCardsList";
 import Loading from "./Loading";
-import { CardListRouteProp, CardProps } from "../types/card";
+import { CardListRouteProp, BoardListProps } from "../types/card";
 import AddList from "./AddList";
+import Error from "./Error";
+import { getErrorMessage } from "../helper";
 
 const CardList = ({ route }: { route: CardListRouteProp }) => {
   const { boardId } = route.params;
+  const [isAddingList, setIsAddingList] = useState<boolean>(false);
 
   const {
-    data: cards,
+    data: boardLists,
     isLoading,
     error,
     refetch,
   } = useGetMergedBoardDataQuery(boardId);
-  const [isAddingList, setIsAddingList] = useState<boolean>(false);
 
   return (
     <View style={{ flex: 1, backgroundColor: "pink" }}>
       {isLoading && <Loading />}
-      {error && (
-        <Text>
-          {typeof error === "string"
-            ? error
-            : "An error occurred. Please try again later."}
-        </Text>
-      )}
+      {error && <Error error={getErrorMessage(error)} />}
 
-      {!isLoading && !error && cards && (
+      {!isLoading && !error && boardLists && (
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -46,11 +42,11 @@ const CardList = ({ route }: { route: CardListRouteProp }) => {
               marginTop: 10,
             }}
           >
-            {cards &&
-              cards.map((card) => (
+            {boardLists &&
+              boardLists.map((boardList) => (
                 <BoardsAndCardsList
-                  key={card.id}
-                  cards={card}
+                  key={boardList.id}
+                  boardList={boardList}
                   refetch={refetch}
                 />
               ))}

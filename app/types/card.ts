@@ -20,7 +20,7 @@ export interface MergedCard extends TrelloCard {
   list: TrelloList;
 }
 
-export interface CardProps {
+export interface BoardListProps {
   id: string;
   name: string;
   cardData: CardData[];
