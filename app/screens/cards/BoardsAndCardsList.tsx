@@ -1,31 +1,72 @@
 import React from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
-import { Card, Text } from "react-native-paper";
+import { ActivityIndicator, Card, Text } from "react-native-paper";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { CardProps } from "../../types/card";
 import CardItem from "./CardItem";
 import AddCard from "./AddCard";
+import { useRemoveListMutation } from "../../redux/services/ListApi";
+import Loading from "../Loading";
+import Error from "../Error";
+import { getErrorMessage } from "../../helper";
 
-const BoardsAndCardsList = ({ cards }: { cards: CardProps }) => {
+const BoardsAndCardsList = ({
+  cards,
+  refetch,
+}: {
+  cards: CardProps;
+  refetch: () => void;
+}) => {
+  const [removeList, { isLoading, error, isError }] = useRemoveListMutation();
+
+  const handleDeleteBoardAndCardsList = async () => {
+    const { data } = await removeList({ listId: cards.id });
+    console.log(data);
+
+    if (data) {
+      refetch();
+    }
+  };
+
   return (
     <Card style={styles.container}>
-      <Card.Content>
-        <View style={styles.header}>
-          <Text variant="titleSmall">{cards.name}</Text>
-          <FontAwesome6 name="trash" size={16} color="red" solid />
+      {isLoading && (
+        <View style={styles.loadingAndErrorContainer}>
+          <Loading />
         </View>
+      )}
 
-        <View>
-          {cards?.cardData?.length > 0 && (
-            <ScrollView nestedScrollEnabled>
-              {cards.cardData.map((card) => (
-                <CardItem cardData={card} key={card.id} />
-              ))}
-            </ScrollView>
-          )}
-          <AddCard />
+      {isError && (
+        <View style={styles.loadingAndErrorContainer}>
+          <Error error={getErrorMessage(error)} />
         </View>
-      </Card.Content>
+      )}
+
+      {!isLoading && !isError && (
+        <Card.Content>
+          <View style={styles.header}>
+            <Text variant="titleSmall">{cards.name}</Text>
+            <FontAwesome6
+              name="trash"
+              size={16}
+              color="red"
+              solid
+              onPress={handleDeleteBoardAndCardsList}
+            />
+          </View>
+
+          <View>
+            {cards?.cardData?.length > 0 && (
+              <ScrollView nestedScrollEnabled>
+                {cards.cardData.map((card) => (
+                  <CardItem cardData={card} key={card.id} />
+                ))}
+              </ScrollView>
+            )}
+            <AddCard />
+          </View>
+        </Card.Content>
+      )}
     </Card>
   );
 };
@@ -39,7 +80,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 10,
+    marginTop: 15,
+  },
+  loadingAndErrorContainer: {
+    marginTop: 50,
   },
 });
 

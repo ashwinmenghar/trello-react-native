@@ -16,8 +16,21 @@ export interface InitialState {
   };
 }
 
-export interface List {
-  id: string;
+export interface CreateBoardRequest {
   name: string;
-  idBoard: string;
+}
+
+export interface BoardResponse extends Board {
+  desc?: string;
+  closed?: boolean;
+  idOrganization?: string;
+  pinned?: boolean;
+  url?: string;
+  shortUrl?: string;
+}
+
+export interface BoardApiState {
+  data: BoardResponse[];
+  isLoading: boolean;
+  error: string | null;
 }

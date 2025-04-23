@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Board } from "../../types/board";
 // @ts-ignore
 import { BASE_URL, TOKEN, API_KEY } from "@env";
+import { ApiError } from "../../types";
 
 export const boardApi = createApi({
   reducerPath: "boardApi",
@@ -31,6 +32,7 @@ export const boardApi = createApi({
           token: TOKEN,
         },
       }),
+      transformErrorResponse: (response): ApiError => response as ApiError,
     }),
   }),
 });

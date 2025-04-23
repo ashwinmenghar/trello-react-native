@@ -36,19 +36,6 @@ export const boardWithCardsApi = createApi({
         }
       },
     }),
-
-    // createLists: builder.mutation({
-    //   query: ({ name, boardId }: { name: string; boardId: string }) => ({
-    //     url: `listsss/`,
-    //     method: "POST",
-    //     params: {
-    //       key: API_KEY,
-    //       token: TOKEN,
-    //       name: name,
-    //       idBoard: boardId,
-    //     },
-    //   }),
-    // }),
   }),
 });
 

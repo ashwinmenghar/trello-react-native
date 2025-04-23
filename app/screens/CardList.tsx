@@ -48,7 +48,11 @@ const CardList = ({ route }: { route: CardListRouteProp }) => {
           >
             {cards &&
               cards.map((card) => (
-                <BoardsAndCardsList key={card.id} cards={card} />
+                <BoardsAndCardsList
+                  key={card.id}
+                  cards={card}
+                  refetch={refetch}
+                />
               ))}
 
             <View
